@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Using projective dynamics to add dynamics capability to a pre-trained kinematics generative model of human motion">
+  <meta name="keywords" content="DROP, Generative Models, Projective Dynamics, Human Motion, Animation">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DROP: Dynamics Responses from Human Motion Prior and Projective Dynamics</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.ico">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">DROP: Dynamics Responses from Human Motion Prior and Projective Dynamics</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://cs.stanford.edu/~yifengj/">Yifeng Jiang</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://sites.google.com/view/snuimo/people">Jungdam Won</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="http://yutingye.info/">Yuting Ye</a><sup>3</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://profiles.stanford.edu/c-karen-liu">C. Karen Liu</a><sup>1</sup>,
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Stanford University,</span>
+            <span class="author-block"><sup>2</sup>Seoul National University</span>
+            <span class="author-block"><sup>3</sup>Meta Reality Labs</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2309.13742"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+              <span class="link-block">
+                <a href="https://youtu.be/tF5WW7qNMLI"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+<!--      <video id="teaser" autoplay muted loop playsinline height="100%">-->
+<!--        <source src="./static/videos/teaser.mp4"-->
+<!--                type="video/mp4">-->
+<!--      </video>-->
+
+      <img id="teaser" src="./static/images/teaser.png"
+       alt="Teaser figure."/>
+      <h2 class="subtitle has-text-centered">
+        DROP, a plug-in human simulator that adds dynamics capability to a pre-trained kinematics generative models, synthesizes dynamic reaction and recovery motion in response to a variety of perturbations.
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+<!--<section class="hero is-light is-small">-->
+<!--  <div class="hero-body">-->
+<!--    <div class="container">-->
+<!--      <div id="results-carousel" class="carousel results-carousel">-->
+<!--        <div class="item item-steve">-->
+<!--          <video poster="" id="steve" autoplay controls muted loop playsinline height="100%">-->
+<!--            <source src="./static/videos/steve.mp4"-->
+<!--                    type="video/mp4">-->
+<!--          </video>-->
+<!--        </div>-->
+<!--        <div class="item item-chair-tp">-->
+<!--          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">-->
+<!--            <source src="./static/videos/chair-tp.mp4"-->
+<!--                    type="video/mp4">-->
+<!--          </video>-->
+<!--        </div>-->
+<!--        <div class="item item-shiba">-->
+<!--          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">-->
+<!--            <source src="./static/videos/shiba.mp4"-->
+<!--                    type="video/mp4">-->
+<!--          </video>-->
+<!--        </div>-->
+<!--        <div class="item item-fullbody">-->
+<!--          <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">-->
+<!--            <source src="./static/videos/fullbody.mp4"-->
+<!--                    type="video/mp4">-->
+<!--          </video>-->
+<!--        </div>-->
+<!--        <div class="item item-blueshirt">-->
+<!--          <video poster="" id="blueshirt" autoplay controls muted loop playsinline height="100%">-->
+<!--            <source src="./static/videos/blueshirt.mp4"-->
+<!--                    type="video/mp4">-->
+<!--          </video>-->
+<!--        </div>-->
+<!--        <div class="item item-mask">-->
+<!--          <video poster="" id="mask" autoplay controls muted loop playsinline height="100%">-->
+<!--            <source src="./static/videos/mask.mp4"-->
+<!--                    type="video/mp4">-->
+<!--          </video>-->
+<!--        </div>-->
+<!--        <div class="item item-coffee">-->
+<!--          <video poster="" id="coffee" autoplay controls muted loop playsinline height="100%">-->
+<!--            <source src="./static/videos/coffee.mp4"-->
+<!--                    type="video/mp4">-->
+<!--          </video>-->
+<!--        </div>-->
+<!--        <div class="item item-toby">-->
+<!--          <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">-->
+<!--            <source src="./static/videos/toby2.mp4"-->
+<!--                    type="video/mp4">-->
+<!--          </video>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</section>-->
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+
+          <p>
+          Synthesizing realistic human movements, dynamically responsive to the environment,
+            is a long-standing objective in character animation, with applications in
+            computer vision, sports, and healthcare, for motion prediction and data augmentation.
+          </p>
+          <p>
+            Recent kinematics-based generative motion models offer impressive scalability in modeling
+            extensive motion data, albeit without an interface to reason about and interact with physics.
+            While simulator-in-the-loop learning approaches enable highly physically realistic behaviors,
+            the challenges in training often affect scalability and adoption.
+          </p>
+          <p>
+            We introduce DROP, a novel framework for modeling Dynamics Responses of humans
+            using generative mOtion prior and Projective dynamics. DROP can be viewed as a highly stable,
+            minimalist physics-based human simulator that interfaces with a kinematics-based generative motion prior.
+            Utilizing projective dynamics, DROP allows flexible and simple integration of the learned motion prior
+            as one of the projective energies, seamlessly incorporating control provided by the motion prior
+            with Newtonian dynamics. Serving as a model-agnostic plug-in, DROP enables us to fully leverage
+            recent advances in generative motion models for physics-based motion synthesis.
+          </p>
+          <p>
+            We conduct extensive evaluations of our model across different motion tasks and various physical
+            perturbations, demonstrating the scalability and diversity of responses.
+          </p>
+
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    <!-- Paper video. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Full Video</h2>
+        <div class="publication-video">
+          <iframe src="https://www.youtube.com/embed/tF5WW7qNMLI?rel=0&amp;showinfo=0"
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+    <!--/ Paper video. -->
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <h2 class="title is-3">Diverse Physical Scenarios</h2>
+    <div class="content has-text-justified">
+      <p>
+        Generative motion models are trained on motions collected in empty MoCap rooms without physical interactions.
+      </p>
+      <p>
+        With DROP, we can guide a non-physical generative motion model to synthesize realistic
+        human motions in a variety of physical scenarios, without needing retraining or high-level controller.
+      </p>
+      <p>
+        Inherited from the motion prior, we can synthesize diverse motions even in the same physical scenario.
+      </p>
+    </div>
+
+    <div class="columns is-centered">
+
+      <!-- Tripped by obstacles. -->
+      <div class="column">
+        <div class="content">
+          <h3 class="title is-3">Tripped by obstacles</h3>
+          <video id="tripped" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/obstacles.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <!--/ Tripped by obstacles. -->
+
+      <!-- Moving Platform. -->
+      <div class="column">
+        <div class="content">
+          <h3 class="title is-3">Tilting platform</h3>
+          <video id="tilt" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/platform.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <!--/ Moving Platform. -->
+
+    </div>
+
+
+    <div class="columns is-centered">
+
+      <!-- Dragged by hand. -->
+      <div class="column">
+        <div class="content">
+          <h3 class="title is-3">Dragged by hand</h3>
+          <video id="drag" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/drag_hand.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <!--/ Dragged by hand. -->
+
+      <!-- Projectiles. -->
+      <div class="column">
+        <div class="content">
+          <h3 class="title is-3">Balls thrown at</h3>
+          <video id="balls" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/projectiles.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <!--/ Projectiles. -->
+
+    </div>
+
+
+    <div class="columns is-centered">
+
+      <!-- stiff knee. -->
+      <div class="column">
+        <div class="content">
+          <h3 class="title is-3">Walking with a stiff knee</h3>
+          <video id="stiff" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/stiff-knee-2.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <!--/ stiff knee. -->
+
+      <!-- back flip -->
+      <div class="column">
+        <div class="content">
+          <h3 class="title is-3">Pushed during back flip</h3>
+          <video id="flip" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/backflip.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <!--/ back flip. -->
+
+    </div>
+
+
+    <!-- two char. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Two-character Interaction</h2>
+
+        <div class="content has-text-justified">
+          <p>
+            DROP also allows us to make two generative models to physically interact with each other,
+            treating the other model (human character) as external physics.
+          </p>
+        </div>
+
+        <div class="content has-text-centered">
+          <video id="two-char"
+                 controls
+                 muted
+                 preload
+                 playsinline
+                 width="75%">
+            <source src="./static/videos/2-char.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+
+      </div>
+    </div>
+    <!--/ two char. -->
+
+    <!-- compare. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Comparison to DRL-based Methods</h2>
+
+        <div class="content has-text-justified">
+          <p>
+            As our method is built upon a generative model trained on large-scale human motion data, compared to DRL-based methods, we can generate diverse and compliant physical responses.
+          </p>
+        </div>
+
+        <!-- small. -->
+        <h3 class="title is-4">Responses to small external forces</h3>
+
+        <div class="content has-text-centered">
+          <video id="small"
+                 controls
+                 muted
+                 preload
+                 playsinline
+                 width="75%">
+            <source src="./static/videos/small-compare.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <!--/ small. -->
+
+
+        <!-- large. -->
+        <h3 class="title is-4">Responses to large external forces</h3>
+
+        <div class="content has-text-centered">
+          <video id="large"
+                 controls
+                 muted
+                 preload
+                 playsinline
+                 width="75%">
+            <source src="./static/videos/large-compare.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <!--/ large. -->
+
+      </div>
+    </div>
+    <!--/ compare. -->
+
+
+<!--    &lt;!&ndash; Concurrent Work. &ndash;&gt;-->
+<!--    <div class="columns is-centered">-->
+<!--      <div class="column is-full-width">-->
+<!--        <h2 class="title is-3">Related Links</h2>-->
+
+<!--        <div class="content has-text-justified">-->
+<!--          <p>-->
+<!--            There's a lot of excellent work that was introduced around the same time as ours.-->
+<!--          </p>-->
+<!--          <p>-->
+<!--            <a href="https://arxiv.org/abs/2104.09125">Progressive Encoding for Neural Optimization</a> introduces an idea similar to our windowed position encoding for coarse-to-fine optimization.-->
+<!--          </p>-->
+<!--          <p>-->
+<!--            <a href="https://www.albertpumarola.com/research/D-NeRF/index.html">D-NeRF</a> and <a href="https://gvv.mpi-inf.mpg.de/projects/nonrigid_nerf/">NR-NeRF</a>-->
+<!--            both use deformation fields to model non-rigid scenes.-->
+<!--          </p>-->
+<!--          <p>-->
+<!--            Some works model videos with a NeRF by directly modulating the density, such as <a href="https://video-nerf.github.io/">Video-NeRF</a>, <a href="https://www.cs.cornell.edu/~zl548/NSFF/">NSFF</a>, and <a href="https://neural-3d-video.github.io/">DyNeRF</a>-->
+<!--          </p>-->
+<!--          <p>-->
+<!--            There are probably many more by the time you are reading this. Check out <a href="https://dellaert.github.io/NeRF/">Frank Dellart's survey on recent NeRF papers</a>, and <a href="https://github.com/yenchenlin/awesome-NeRF">Yen-Chen Lin's curated list of NeRF papers</a>.-->
+<!--          </p>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    &lt;!&ndash;/ Concurrent Work. &ndash;&gt;-->
+
+  </div>
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{jiang2023drop,
+  author    = {Jiang, Yifeng and Won, Jungdam and Ye, Yuting and Liu, C Karen},
+  title     = {DROP: Dynamics Responses from Human Motion Prior and Projective Dynamics},
+  journal   = {SIGGRAPH Asia},
+  year      = {2023},
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            This means you are free to borrow the <a
+              href="https://github.com/nerfies/nerfies.github.io">source code</a> of this website,
+            we just ask that you link back to this page in the footer.
+            Please remember to remove the analytics code included in the header of the website which
+            you do not want on your website.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
